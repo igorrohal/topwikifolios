@@ -6,8 +6,6 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.googleapis.media.MediaHttpUploader;
-import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -16,8 +14,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.ParentReference;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -90,28 +86,29 @@ private static Drive drive;
 
     /** Uploads a file using either resumable or direct media upload. */
     private static File uploadFile() throws IOException {
-        String folderId = findFolderId();
-        FileList fileList = drive.files().list().execute();
-
-        File fileMetadata = new File();
-        fileMetadata.setTitle("uploaded_sample_by_app.csv");
-        ParentReference folder = new ParentReference();
-        folder.setId("TopWikifolios");
-        fileMetadata.setParents(Collections.singletonList(folder));
-
-        FileContent mediaContent = new FileContent("text/csv", UPLOAD_FILE);
-
-        Drive.Files.Insert insert = drive.files().insert(fileMetadata, mediaContent);
-        MediaHttpUploader uploader = insert.getMediaHttpUploader();
-        uploader.setDirectUploadEnabled(true);
-        return insert.execute();
+//        String folderId = findFolderId();
+//        FileList fileList = drive.files().list().execute();
+//
+//        File fileMetadata = new File();
+//        fileMetadata.setTitle("uploaded_sample_by_app.csv");
+//        ParentReference folder = new ParentReference();
+//        folder.setId("TopWikifolios");
+//        fileMetadata.setParents(Collections.singletonList(folder));
+//
+//        FileContent mediaContent = new FileContent("text/csv", UPLOAD_FILE);
+//
+//        Drive.Files.Insert insert = drive.files().insert(fileMetadata, mediaContent);
+//        MediaHttpUploader uploader = insert.getMediaHttpUploader();
+//        uploader.setDirectUploadEnabled(true);
+//        return insert.execute();
+        return null;
     }
 
     private static String findFolderId() {
-        File fileMetadata = new File();
-        fileMetadata.setTitle("TopRankedWikifolios");
-        fileMetadata.setMimeType("application/vnd.google-apps.folder");
-
+//        File fileMetadata = new File();
+//        fileMetadata.setTitle("TopRankedWikifolios");
+//        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+//
 //        File file = drive.files().insert(fileMetadata)
 //                .setFields("id")
 //                .execute();

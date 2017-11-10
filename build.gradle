@@ -25,9 +25,15 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+
 	compile 'com.google.api-client:google-api-client:1.23.0'
 	compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
 	compile 'com.google.apis:google-api-services-drive:v3-rev89-1.23.0'
+
+	compile 'org.jsoup:jsoup:1.11.1'
+
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
