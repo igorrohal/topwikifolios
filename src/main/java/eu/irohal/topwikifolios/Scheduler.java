@@ -1,10 +1,9 @@
 package eu.irohal.topwikifolios;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.scheduling.annotation.*;
+import org.springframework.stereotype.*;
 
 @Component
 public class Scheduler {
@@ -14,10 +13,8 @@ public class Scheduler {
     @Autowired
     private WikifolioParser wikifolioParser;
 
-    @Scheduled(cron = "0 * * * * ?") // every minute
+    @Scheduled(fixedRate = 1800000) // every half an hour
     public void fetchWikifolios() {
-        log.trace("Scheduler: Fetch wikifolios");
-
         wikifolioParser.fetchWikifolios();
     }
 

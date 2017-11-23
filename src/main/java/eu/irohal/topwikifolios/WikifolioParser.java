@@ -1,49 +1,46 @@
 package eu.irohal.topwikifolios;
 
-import org.apache.commons.io.FileUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.jsoup.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
+import org.slf4j.*;
+import org.springframework.stereotype.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.net.*;
+import java.time.*;
+import java.util.*;
+import java.util.stream.*;
 
 @Component
 public class WikifolioParser {
 
     private static final Logger log = LoggerFactory.getLogger(WikifolioParser.class);
 
-    private static final String WIKIFOLIOS_URL_BASE = "https://www.wikifolio.com/dynamic/de/de/wikifoliosearch/search?tags=aktde,akteur,aktusa,akthot,aktint,etf,fonds,anlagezert,hebel&media=true&private=true&assetmanager=true&theme=true&WithoutLeverageProductsOnly=true&languageOnly=true";
+    private static final String WIKIFOLIO_DETAIL_BASE = "https://www.wikifolio.com";
+    private static final String WIKIFOLIOS_LIST_BASE = "https://www.wikifolio.com/dynamic/de/de/wikifoliosearch/search?tags=aktde,akteur,aktusa,akthot,aktint,etf,fonds,anlagezert,hebel&media=true&private=true&assetmanager=true&theme=true&WithoutLeverageProductsOnly=true&languageOnly=true";
     private static final List<String> WIKIFOLIOS_URLS = Arrays.asList(
-            WIKIFOLIOS_URL_BASE,
-            WIKIFOLIOS_URL_BASE + "&startValue=12",
-            WIKIFOLIOS_URL_BASE + "&startValue=24",
-            WIKIFOLIOS_URL_BASE + "&startValue=36",
-            WIKIFOLIOS_URL_BASE + "&startValue=48",
-            WIKIFOLIOS_URL_BASE + "&startValue=60",
-            WIKIFOLIOS_URL_BASE + "&startValue=72");
+            WIKIFOLIOS_LIST_BASE,
+            WIKIFOLIOS_LIST_BASE + "&startValue=12",
+            WIKIFOLIOS_LIST_BASE + "&startValue=24",
+            WIKIFOLIOS_LIST_BASE + "&startValue=36");
 
-    	private static final String OUTPUT_FILE_PATH = "/Users/d061757/Google Drive/TopWikifolios/topwikifolios.csv";
     private static final char DELIMETER = ';';
-    private static final String HEADER = "Name;Erstellungsdatum;Punktestand;seit Beginn;1 Monat;Max.Verlust;Erstemission;Performancegebühr;ISIN;Invst.Kapital";
 
-    final RestTemplate restTemplate = new RestTemplate();
+    private String latestCsvContents = "";
 
-    @Scheduled(cron = "0 0/30 * * * ?") // twice / hour
     public void fetchWikifolios() {
+        log.info("Triggered at " + LocalTime.now());
+
         final List<Wikifolio> allWikifolios = WIKIFOLIOS_URLS.stream()
-                .map(url -> fetchSite(url))
+                .map(url -> {
+                    try {
+                        return fetchSite(url);
+                    } catch (IOException e) {
+                        log.error("IOException", e);
+                    }
+                    return Collections.EMPTY_LIST;
+                })
                 .reduce((site1, site2) -> {
                     site1.addAll(site2);
                     return site1;
@@ -51,16 +48,13 @@ public class WikifolioParser {
 
         final String csvContents = allWikifolios.stream()
                 .map(w -> w.csvSerialize(DELIMETER))
-                .reduce(HEADER, (i, ws) -> i += "\n" + ws);
+                .reduce(Wikifolio.HEADER, (i, ws) -> i += "\n" + ws);
 
-        writeNewFile(csvContents);
+        latestCsvContents = csvContents;
     }
 
-    private List<Wikifolio> fetchSite(final String path) {
-        final ResponseEntity<String> response = restTemplate.getForEntity(path, String.class);
-        final String html = response.getBody();
-//        log.info(html);
-        final Document doc = Jsoup.parse(html);
+    private List<Wikifolio> fetchSite(final String path) throws MalformedURLException, IOException {
+        final Document doc = Jsoup.parse(new URL(path), 10000);
 
         final Elements wikifolioOuterDivs = doc.select("div.wikifolio-preview");
 
@@ -109,16 +103,39 @@ public class WikifolioParser {
                     continue;
                 }
             }
+            final String wikifolioPath = WIKIFOLIO_DETAIL_BASE + elem.selectFirst("a.wikifolio-preview-title-link").attr("href");
+            try {
+                fetchCurrentPrices(w, wikifolioPath);
+            } catch (IOException e) {
+                log.error("IOException", e);
+            }
+
+            try {
+                Thread.sleep(2000); // just to be safe :)
+            } catch (InterruptedException e) {
+                log.error("Sleep interrupted", e);
+            }
+
+            log.info("Finished Wikifolio: " + w.getName());
             return w;
         }).collect(Collectors.toList());
     }
 
-    private void writeNewFile(final String fileContents) {
-        try {
-            FileUtils.writeStringToFile(new File(OUTPUT_FILE_PATH), fileContents, "UTF-8");
-        } catch (IOException e) {
-            log.error("Writing file failed.", e);
+    private void fetchCurrentPrices(final Wikifolio wikifolio, final String wikifolioPath) throws MalformedURLException, IOException {
+        final Document doc = Jsoup.parse(new URL(wikifolioPath), 10000);
+        final Element firstRateElem = doc.selectFirst("h4.wikifolio-detail-performance-header");
+        if(firstRateElem.parent().text().contains("Mittelkurs")) {
+            wikifolio.setMittel(firstRateElem.ownText());
+        } else {
+            final Element bidRateElem = firstRateElem;
+            wikifolio.setBid(bidRateElem.ownText());
+            bidRateElem.remove();
+            final Element askRateElem = doc.selectFirst("h4.wikifolio-detail-performance-header");
+            wikifolio.setAsk(askRateElem.ownText());
         }
     }
 
+    public String getLatestCsvContents() {
+        return latestCsvContents;
+    }
 }

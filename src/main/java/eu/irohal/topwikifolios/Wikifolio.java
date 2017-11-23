@@ -2,6 +2,8 @@ package eu.irohal.topwikifolios;
 
 public class Wikifolio {
 
+    public static final String HEADER = "Name;Erstellungsdatum;Punktestand;seit Beginn;1 Monat;Max.Verlust;Erstemission;Performancegebühr;ISIN;Invst.Kapital;Bid;Ask;Mittel";
+
     private String name;
     private String founded;
     private String points;
@@ -12,6 +14,9 @@ public class Wikifolio {
     private String firstEmission;
     private String performanceFee;
     private String totalCapital;
+    private String bid;
+    private String ask;
+    private String mittel;
 
     public String getName() {
         return name;
@@ -89,11 +94,35 @@ public class Wikifolio {
         this.totalCapital = totalCapital;
     }
 
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
+    }
+
+    public String getAsk() {
+        return ask;
+    }
+
+    public void setAsk(String ask) {
+        this.ask = ask;
+    }
+
+    public String getMittel() {
+        return mittel;
+    }
+
+    public void setMittel(String mittel) {
+        this.mittel = mittel;
+    }
+
     public String getTotalCapital() {
         return totalCapital;
     }
     public String csvSerialize(final char delimiter) {
-            return getName() + delimiter
+            return getName().replaceAll(",", " ") + delimiter
                     + getFounded() + delimiter
                     + getPoints() + delimiter
                     + getFromBeginning() + delimiter
@@ -102,7 +131,10 @@ public class Wikifolio {
                     + getFirstEmission() + delimiter
                     + getPerformanceFee() + delimiter
                     + getIsin() + delimiter
-                    + getTotalCapital();
+                    + getTotalCapital() + delimiter
+                    + (getBid() != null ? getBid() : "") + delimiter
+                    + (getAsk() != null ? getAsk() : "") + delimiter
+                    + (getMittel() != null ? getMittel() : "");
     }
 
     public void setPointsRawData(final String pointsRawData) {
