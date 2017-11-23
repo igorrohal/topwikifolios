@@ -122,7 +122,7 @@ public class Wikifolio {
         return totalCapital;
     }
     public String csvSerialize(final char delimiter) {
-            return getName().replaceAll(",", " ") + delimiter
+            return getName() + delimiter
                     + getFounded() + delimiter
                     + getPoints() + delimiter
                     + getFromBeginning() + delimiter
