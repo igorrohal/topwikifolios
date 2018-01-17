@@ -2,17 +2,16 @@ package eu.irohal.topwikifolios;
 
 public class Wikifolio {
 
-    public static final String HEADER = "Name;Erstellungsdatum;Punktestand;seit Beginn;1 Monat;Max.Verlust;Erstemission;Performancegebühr;ISIN;Invst.Kapital;Bid;Ask;Mittel";
-
     private String name;
-    private String founded;
     private String points;
     private String isin;
     private String fromBeginning;
+    private String fromFirstEmission;
+    private String fromYearBeginning;
     private String oneMonth;
+    private String threeMonths;
+    private String sixMonths;
     private String maximalLoss;
-    private String firstEmission;
-    private String performanceFee;
     private String totalCapital;
     private String bid;
     private String ask;
@@ -24,14 +23,6 @@ public class Wikifolio {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getFounded() {
-        return founded;
-    }
-
-    public void setFounded(String founded) {
-        this.founded = founded;
     }
 
     public String getPoints() {
@@ -74,22 +65,6 @@ public class Wikifolio {
         return maximalLoss;
     }
 
-    public void setFirstEmission(String firstEmission) {
-        this.firstEmission = firstEmission;
-    }
-
-    public String getFirstEmission() {
-        return firstEmission;
-    }
-
-    public void setPerformanceFee(String performanceFee) {
-        this.performanceFee = performanceFee;
-    }
-
-    public String getPerformanceFee() {
-        return performanceFee;
-    }
-
     public void setTotalCapital(String totalCapital) {
         this.totalCapital = totalCapital;
     }
@@ -121,26 +96,37 @@ public class Wikifolio {
     public String getTotalCapital() {
         return totalCapital;
     }
-    public String csvSerialize(final char delimiter) {
-            return getName() + delimiter
-                    + getFounded() + delimiter
-                    + getPoints() + delimiter
-                    + getFromBeginning() + delimiter
-                    + getOneMonth() + delimiter
-                    + getMaximalLoss() + delimiter
-                    + getFirstEmission() + delimiter
-                    + getPerformanceFee() + delimiter
-                    + getIsin() + delimiter
-                    + getTotalCapital() + delimiter
-                    + (getBid() != null ? getBid() : "") + delimiter
-                    + (getAsk() != null ? getAsk() : "") + delimiter
-                    + (getMittel() != null ? getMittel() : "");
+
+    public String getFromFirstEmission() {
+        return fromFirstEmission;
     }
 
-    public void setPointsRawData(final String pointsRawData) {
-        this.points = pointsRawData
-                .replace(".", "")
-                .replace(" Pkt", "");
+    public String getThreeMonths() {
+        return threeMonths;
+    }
+
+    public String getSixMonths() {
+        return sixMonths;
+    }
+
+    public void setFromFirstEmission(String fromFirstEmission) {
+        this.fromFirstEmission = fromFirstEmission;
+    }
+
+    public void setThreeMonths(String threeMonths) {
+        this.threeMonths = threeMonths;
+    }
+
+    public void setSixMonths(String sixMonths) {
+        this.sixMonths = sixMonths;
+    }
+
+    public String getFromYearBeginning() {
+        return fromYearBeginning;
+    }
+
+    public void setFromYearBeginning(String fromYearBeginning) {
+        this.fromYearBeginning = fromYearBeginning;
     }
 
 }

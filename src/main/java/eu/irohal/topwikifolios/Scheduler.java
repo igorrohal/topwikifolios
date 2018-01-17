@@ -11,11 +11,15 @@ public class Scheduler {
     private static final Logger log = LoggerFactory.getLogger(Scheduler.class);
 
     @Autowired
-    private WikifolioParser wikifolioParser;
+    private TopRankedFetcher topRankedFetcher;
+
+    @Autowired
+    private TopPerformanceFetcher topPerformanceFetcher;
 
     @Scheduled(fixedRate = 1800000) // every half an hour
-    public void fetchWikifolios() {
-        wikifolioParser.fetchWikifolios();
+    public void fetchWikifolios() throws Exception {
+        topPerformanceFetcher.fetch();
+        topRankedFetcher.fetch();
     }
 
 }

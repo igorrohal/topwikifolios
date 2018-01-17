@@ -9,18 +9,21 @@ import javax.servlet.http.*;
 public class TopwikifoliosController {
 
     @Autowired
-    private WikifolioParser wikifolioParser;
+    private TopRankedFetcher topRankedFetcher;
 
-    @RequestMapping(value = "/", produces = "text/plain; charset=UTF-8")
-    public String text(HttpServletResponse response) {
+    @Autowired
+    private TopPerformanceFetcher topPerformanceFetcher;
+
+    @RequestMapping(value = "/rank", produces = "text/plain; charset=UTF-8")
+    public String topRanked(HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
-        return wikifolioParser.getLatestCsvContents();
+        return topRankedFetcher.getLatest();
     }
 
-    @RequestMapping(value = "/csv", produces = "text/csv; charset=UTF-8")
-    public String csv(HttpServletResponse response) {
+    @RequestMapping(value = "/performance", produces = "text/plain; charset=UTF-8")
+    public String topPerformance(HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
-        return wikifolioParser.getLatestCsvContents();
+        return topPerformanceFetcher.getLatest();
     }
 
 }
