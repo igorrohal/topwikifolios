@@ -25,16 +25,16 @@ public class TopRankedFetcher {
     private static final Logger log = LoggerFactory.getLogger(TopRankedFetcher.class);
 
     private static final List<String> WIKIFOLIOS_URLS = Arrays.asList(
-            WIKIFOLIOS_TOP_RANKED_BASE);
-//            ,
-//            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=12",
-//            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=24",
-//            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=36");
+            WIKIFOLIOS_TOP_RANKED_BASE,
+            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=12",
+            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=24",
+            WIKIFOLIOS_TOP_RANKED_BASE + "&startValue=36");
 
     private String latest = "";
 
     @Autowired
     private WikifolioDetailsParser wikifolioDetailsParser;
+
     @Autowired
     private WikifolioSerializer wikifolioSerializer;
 

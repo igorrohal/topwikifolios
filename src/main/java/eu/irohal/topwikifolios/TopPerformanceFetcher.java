@@ -25,21 +25,17 @@ public class TopPerformanceFetcher {
     private static final Logger log = LoggerFactory.getLogger(TopPerformanceFetcher.class);
 
     private static final List<String> WIKIFOLIOS_URLS = Arrays.asList(
-            WIKIFOLIOS_TOP_PERFORMANCE_BASE);
-//            ,
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=12",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=24",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=36",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=48",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=60",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=72",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=84",
-//            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=96");
+            WIKIFOLIOS_TOP_PERFORMANCE_BASE,
+            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=12",
+            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=24",
+            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=36",
+            WIKIFOLIOS_TOP_PERFORMANCE_BASE + "&startValue=48");
 
     private String latest = "";
 
     @Autowired
     private WikifolioDetailsParser wikifolioDetailsParser;
+
     @Autowired
     private WikifolioSerializer wikifolioSerializer;
 
