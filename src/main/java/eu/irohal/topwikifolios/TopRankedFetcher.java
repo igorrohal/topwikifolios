@@ -62,14 +62,16 @@ public class TopRankedFetcher {
         latest = csvContents;
     }
 
+    // TODO: remove duplicacy by having a single fetch-site code
     private List<Wikifolio> fetchSite(final String path) throws IOException {
         final Document doc = fetchDocument(path);
         final Elements wikifolioOuterDivs = doc.select("div.wikifolio-preview");
 
         return wikifolioOuterDivs.stream().map(elem -> {
+            final String wikifolioId = elem.attr("data-wikifolioid");
             final String wikifolioDetailsPath = elem.selectFirst("a.wikifolio-preview-title-link").attr("href");
 
-            final Wikifolio wikifolio = wikifolioDetailsParser.fetchWikifolio(wikifolioDetailsPath);
+            final Wikifolio wikifolio = wikifolioDetailsParser.fetchWikifolio(wikifolioDetailsPath, wikifolioId);
 
             try {
                 Thread.sleep(1000); // just to be safe :)

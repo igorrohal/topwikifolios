@@ -129,4 +129,23 @@ public class Wikifolio {
         this.fromYearBeginning = fromYearBeginning;
     }
 
+    @Override
+    public String toString() {
+        return "Wikifolio{" +
+                "name='" + name + '\'' +
+                ", points='" + points + '\'' +
+                ", isin='" + isin + '\'' +
+                ", fromBeginning='" + fromBeginning + '\'' +
+                ", fromFirstEmission='" + fromFirstEmission + '\'' +
+                ", fromYearBeginning='" + fromYearBeginning + '\'' +
+                ", oneMonth='" + oneMonth + '\'' +
+                ", threeMonths='" + threeMonths + '\'' +
+                ", sixMonths='" + sixMonths + '\'' +
+                ", maximalLoss='" + maximalLoss + '\'' +
+                ", totalCapital='" + totalCapital + '\'' +
+                ", bid='" + bid + '\'' +
+                ", ask='" + ask + '\'' +
+                ", mittel='" + mittel + '\'' +
+                '}';
+    }
 }
