@@ -16,7 +16,7 @@ public class Scheduler {
     @Autowired
     private TopPerformanceFetcher topPerformanceFetcher;
 
-    @Scheduled(fixedRate = 5400000) // every hour
+    @Scheduled(fixedRate = 3600000) // every hour
     public void fetchWikifolios() throws Exception {
         topPerformanceFetcher.fetch();
         topRankedFetcher.fetch();

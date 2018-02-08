@@ -20,13 +20,10 @@ public class WikifolioSerializer {
 
     public String topRanked(final Wikifolio wikifolio, final char delimiter) {
         return wikifolio.getName() + delimiter
-                + delimiter // was 'founded' before
                 + wikifolio.getPoints() + delimiter
                 + wikifolio.getFromBeginning() + delimiter
                 + wikifolio.getOneMonth() + delimiter
                 + wikifolio.getMaximalLoss() + delimiter
-                + delimiter // was 'firstEmission' before
-                + delimiter // was 'fee' before
                 + wikifolio.getIsin() + delimiter
                 + wikifolio.getTotalCapital() + delimiter
                 + (wikifolio.getBid() != null ? wikifolio.getBid() : "") + delimiter
@@ -62,7 +59,7 @@ public class WikifolioSerializer {
                 + wikifolio.getSixMonths() + delimiter
                 + wikifolio.getMaximalLoss() + delimiter
                 + wikifolio.getIsin() + delimiter
-                + wikifolio.getTotalCapital() + delimiter
+                + (wikifolio.getTotalCapital() != null ? wikifolio.getTotalCapital() : "") + delimiter
                 + (wikifolio.getBid() != null ? wikifolio.getBid() : "") + delimiter
                 + (wikifolio.getAsk() != null ? wikifolio.getAsk() : "") + delimiter
                 + (wikifolio.getMittel() != null ? wikifolio.getMittel() : "");
